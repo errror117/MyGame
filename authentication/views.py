@@ -10,6 +10,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from rest_framework.permissions import BasePermission
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class IsSuperUser(BasePermission):
     """Custom permission to allow only superusers to access an endpoint."""
@@ -18,13 +23,18 @@ class IsSuperUser(BasePermission):
         return request.user and request.user.is_superuser
 
 class ProtectedView(APIView):
-    """A protected API that only superusers can access."""
-    permission_classes = [IsSuperUser]
+     """A sample API that requires authentication."""
+     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        return Response({'message': f'Hello, {request.user.username}! You have superuser access.'}, status=200)
-    def get(self, request):
-        return Response({'message': f'Hello, {request.user.username}! This is a protected API.'}, status=200)
+     def get(self, request):
+        logger.debug(f"Request Headers: {request.headers}")
+        logger.debug(f"Authenticated User: {request.user}")
+
+        if request.user.is_authenticated:
+            return Response({'message': f'Hello, {request.user.username}! JWT is working.'}, status=200)
+        else:
+            logger.debug("User is not authenticated!")
+            return Response({'detail': 'User is not authenticated'}, status=403)
     
 def get_tokens_for_user(user):
     """Generate JWT tokens for a user."""
