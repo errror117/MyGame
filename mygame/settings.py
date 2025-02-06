@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-25v(^*pq@8cemkm30!r-6mcc_+&3k%7++4o_+l_!dkw-uvysox
 DEBUG = False
 
 ALLOWED_HOSTS = ['*'] # Allows all domains (not secure, only for testing!)
+CSRF_TRUSTED_ORIGINS = ['https://mygame-fyqk.onrender.com']
 
 
 # Application definition
