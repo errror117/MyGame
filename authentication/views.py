@@ -60,20 +60,24 @@ def register(request):
     user = User.objects.create_user(username=username, password=password)
     return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
 
-@csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt  # Disable CSRF for login API
 @api_view(['POST'])
 def login(request):
-    """API endpoint for user login with detailed error messages."""
+    """API endpoint for user login."""
+    print("\nReceived Request Data:", request.data)  # Debugging
+    
     username = request.data.get('username')
     password = request.data.get('password')
 
     if not username or not password:
-        return Response({'error': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Both username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
 
     user = authenticate(username=username, password=password)
 
-    if user is None:
-        return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
-
-    tokens = get_tokens_for_user(user)
-    return Response({'message': 'Login successful', 'tokens': tokens}, status=status.HTTP_200_OK)
+    if user is not None:
+        tokens = get_tokens_for_user(user)  # Generate JWT tokens
+        return Response({'message': 'Login successful', 'tokens': tokens}, status=status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

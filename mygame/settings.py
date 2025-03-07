@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -24,10 +25,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-25v(^*pq@8cemkm30!r-6mcc_+&3k%7++4o_+l_!dkw-uvysox'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*'] # Allows all domains (not secure, only for testing!)
-CSRF_TRUSTED_ORIGINS = ['https://mygame-fyqk.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://mygame-fyqk.onrender.com',
+    'http://127.0.0.1:8000',
+    'https://127.0.0.1:8000',
+    'http://localhost:8000',
+    'https://localhost:8000',
+]
+
+
 
 
 # Application definition
@@ -115,12 +124,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Enable JWT Authentication
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',  # Allow login for unauthenticated users
     ),
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # Token valid for 1 day
@@ -145,9 +155,16 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
+if os.getenv('DJANGO_PRODUCTION', 'False') == 'True':
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:
+    SECURE_SSL_REDIRECT = False  # Allow local HTTP
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
