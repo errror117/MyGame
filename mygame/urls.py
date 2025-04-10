@@ -26,4 +26,5 @@ urlpatterns = [
     path('', home, name='home'),  # Add homepage route
     path('admin/', admin.site.urls),
     path('api/auth/', include('authentication.urls')),  # Include authentication URLs
+    path('api/game/', include('game.urls')),  # Game APIs
 ]

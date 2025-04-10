@@ -1,13 +1,12 @@
 from django.urls import path
-from .views import register, login
+from .views import register, login, admin_dashboard
 from .views import ProtectedView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('register/', register, name='register'),
     path('login/', login, name='login'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # JWT login endpoint
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token endpoint
+    path('admin-dashboard/', admin_dashboard, name='admin-dashboard'),
 ]
 
 urlpatterns += [

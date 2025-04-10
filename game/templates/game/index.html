@@ -1,0 +1,11 @@
+<!-- templates/game/index.html -->
+{% extends "game/base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Game!</h1>
+<p>Start playing now or log in to track your scores.</p>
+<a href="{% url 'game-home' %}">Start Game</a>
+<a href="{% url 'login' %}">Login</a>
+<a href="{% url 'register' %}">Register</a>
+{% endblock %}

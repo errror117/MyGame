@@ -1,0 +1,12 @@
+<!-- templates/game/leaderboard.html -->
+{% extends "game/base.html" %}
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<h1>Leaderboard</h1>
+<ul>
+    {% for player in leaderboard %}
+    <li>{{ player.player.username }} - {{ player.best_score }} points</li>
+    {% endfor %}
+</ul>
+{% endblock %}

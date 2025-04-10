@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-25v(^*pq@8cemkm30!r-6mcc_+&3k%7++4o_+l_!dkw-uvysox'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*'] # Allows all domains (not secure, only for testing!)
 CSRF_TRUSTED_ORIGINS = [
@@ -42,6 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'game',
     'django_extensions',
     'sslserver',
     'authentication',  # Our authentication app
@@ -170,3 +171,31 @@ else:
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Use database-based sessions (default)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Use file-based sessions
+# SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+# SESSION_FILE_PATH = '/tmp/django_sessions'  # Change path if needed
+
+# Use cache-based sessions (Memcached or Redis)
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+# SESSION_CACHE_ALIAS = 'default'
+
+# How long a session lasts (in seconds)
+SESSION_COOKIE_AGE = 86400  # 1 day (24 hours)
+
+# Whether to expire session on browser close
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Secure session cookies (for HTTPS)
+SESSION_COOKIE_SECURE = True  # Set to False if testing locally on HTTP
+
+SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request
+
+# Name of the session cookie
+SESSION_COOKIE_NAME = "game_session"
+
+LOGIN_URL = "/api/game/login/"
+
